@@ -19,5 +19,34 @@
     month: "{{ nextcloud_cronjob.schedule.split(' ')[3] }}"
     weekday: "{{ nextcloud_cronjob.schedule.split(' ')[4] }}"
     job: "{{ nextcloud_cronjob.php_executable}} {{ nextcloud_directory }}/cron.php"
-    
 
+- name: "Create additional cronjobs"
+  cron:
+    name: "{{ item.name }}"
+    state: "{{ 'present' if item.enabled else 'absent' }}"
+    user: "{{ nextcloud_owner }}"
+    cron_file: nextcloud_additional
+    minute: "{{ item.schedule.split(' ')[0] }}"
+    hour: "{{ item.schedule.split(' ')[1] }}"
+    day: "{{ item.schedule.split(' ')[2] }}"
+    month: "{{ item.schedule.split(' ')[3] }}"
+    weekday: "{{ item.schedule.split(' ')[4] }}"
+    job: "{{ item.command }}"
+  with_items: "{{ nextcloud_cronjob.additional }}"
+
+- block:
+
+    - name: "Check if logrotate is installed"
+      package:
+        name: logrotate
+        state: present
+
+    - name: "Create logrotate config for nextcloud logs"
+      template:
+        src: "{{ nextcloud_log.rotate.template }}"
+        dest: "{{ nextcloud_log.rotate.dest }}"
+  rescue:
+     - name: Logrotate enabled, but package not present
+       ansible.builtin.debug:
+         msg: 'Tried to create the logroate config, but no package named logrotate is installedßå'
+  when: nextcloud_log.rotate.enabled

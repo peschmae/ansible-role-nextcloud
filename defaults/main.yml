@@ -26,9 +26,14 @@ nextcloud_admin_user: ncadmin
 nextcloud_admin_password: nextcloud
 
 nextcloud_log:
-  rotate_enable: false
+  rotate:
+    enabled: false
+    keep_days: 14
+    template: logrotate.conf.j2
+    dest: /etc/logrotate.d/nextcloud
   file: "/var/log/nextcloud/nextcloud.log"
   level: 2
+
 
 nextcloud_default_language: "en"
 nextcloud_default_locale: "en_US"
@@ -87,6 +92,7 @@ nextcloud_cronjob:
     # - name: nextcloud_preview-generate
     #   command: "{{ nextcloud_cronjob.php_executable }} {{ nextcloud_directory }}/occ preview:pre-generate"
     #   schedule: "*/5 * * * *"
+    #   enabled: true
     # - name: nextcloud_groupfolder-scan
     #   command: "{{ nextcloud_cronjob.php_executable }} {{ nextcloud_directory }}/occ groupfolders:scan 1"
     #   schedule: "*/5 * * * *"

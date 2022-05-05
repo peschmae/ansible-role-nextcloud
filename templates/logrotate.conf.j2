@@ -1,0 +1,9 @@
+{{ nextcloud_log.file }} {
+	daily
+	missingok
+	rotate {{ nextcloud_log.rotate.keep_days }}
+	compress
+	delaycompress
+	notifempty
+	create 0640 www-data www-data
+}
