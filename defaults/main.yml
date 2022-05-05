@@ -1,0 +1,84 @@
+---
+# defaults file for peschmae.nextcloud
+nextcloud_directory: /opt/nextcloud
+nextcloud_configuration: "{{ nextcloud_directory }}/config/config.php"
+nextcloud_data_directory: "{{ nextcloud_directory }}/ncdata"
+nextcloud_skeleton_directory: "{{ nextcloud_directory }}/core/skeleton"
+
+# owner/group for all files, as well as the cronjob
+nextcloud_owner: 33
+nextcloud_group: 33
+
+nextcloud_passwordsalt: ""
+nextcloud_updatesecret: ""
+
+nextcloud_admin_user: ncadmin
+nextcloud_admin_password: nextcloud
+
+nextcloud_log:
+  rotate_enable: false
+  file: "/var/log/nextcloud/nextcloud.log"
+  level: 2
+
+nextcloud_default_language: "en"
+nextcloud_default_locale: "en_US"
+nextcloud_default_phone_region: "US"
+
+# will be dumped as array into `redis`
+nextcloud_redis:
+  enabled: false
+  host: 127.0.0.1
+  port: 6379
+  dbindex: 1
+
+nextcloud_database:
+  type: mysql
+  name: nextcloud
+  hostname: 127.0.0.1
+  port: 3306
+  table_prefix: oc_
+  username: nextcloud
+  password: nextcloud
+
+# will be prefixerd with `mail_` in config file
+nextcloud_mail:
+  enabled: false
+  smtpmode: smtp
+  smtpsecure: ssl
+  sendmailmode: smtp
+  from_address: nextcloud
+  domain: "{{ nextcloud_domains[0] }}"
+  smtphost: ""
+  smtpport: 456
+  pauth: 1
+  pauthtype: "LOGIN"
+  smtpname: "nextcloud"
+  smtppassword: ""
+
+# nextcloud trusted domains
+nextcloud_domains:
+  - localhost
+  - "{{ ansible_host }}"
+nextcloud_overwrite_cli_uri: "{{ nextcloud_domains[0] }}"
+
+nextcloud_trusted_proxies: []
+
+# must be key:value pairs, that can be added to the nextcloud configuration, currently doesn't support nested key
+nextcloud_additional_configuration: {}
+
+# use this option, if you have nested/complex configs, this will be put into the config just as is
+nextcloud_additional_nested_configs: ""
+
+nextcloud_cronjob:
+  enabled: true
+  schedule: "*/5 * * * *"
+  php_executable: "php"
+  # additional cronjobs
+  additional: []
+    # - name: nextcloud_preview-generate
+    #   command: "{{ nextcloud_cronjob.php_executable }} {{ nextcloud_directory }}/occ preview:pre-generate"
+    #   schedule: "*/5 * * * *"
+    # - name: nextcloud_groupfolder-scan
+    #   command: "{{ nextcloud_cronjob.php_executable }} {{ nextcloud_directory }}/occ groupfolders:scan 1"
+    #   schedule: "*/5 * * * *"
+

@@ -1,0 +1,61 @@
+<?php
+$CONFIG = array(
+    'passwordsalt' => '{{ nextcloud_passwordsalt }}',
+    'secret' => '{{ nextcloud_updatesecret }}',
+    'datadirectory' => '{{ nextcloud_data_directory }}',
+    'logfile' => '{{ nextcloud_log.file }}',
+    'loglevel' => '{{ nextcloud_log.level }}',
+    'trusted_domains' => array (
+    {%- if nextcloud_domains|length > 0 %}
+    {%- for domain in nextcloud_domains %}
+        {{ loop.index0 }} => '{{ domain }}',
+    {%- endfor %}
+    {% else %}
+        0 => '{{ ansible_host }}',
+    {% endif -%}
+    ),
+    'overwrite.cli.url' => '{{ nextcloud_overwrite_cli_uri }}',
+    // database configuration
+    'dbtype' => '{{ nextcloud_database.type }}',
+    'dbname' => '{{ nextcloud_database.name }}',
+    'dbhost' => '{{ nextcloud_database.host }}',
+    'dbport' => '{{ nextcloud_database.port }}',
+    'dbtableprefix' => '{{ nextcloud_database.table_prefix }}',
+    'dbuser' => '{{ nextcloud_database.user }}',
+    'dbpassword' => '{{ nextcloud_database.password }}',
+    {%- if nextcloud_database.type == 'mysql' %}
+    'mysql.utf8mb4' => true,
+    {%- endif %}
+    {%- if nextcloud_mail.enabled  %}
+    // mail configuration
+        {% for key, value in nextcloud_mail.items() -%}
+        {% if key != "enabled" -%}
+            'mail_{{ key }}' => '{{ value }}',
+        {% endif -%}
+        {%- endfor %}
+    {%- endif %}
+    {%- if nextcloud_redis.enabled  %}
+    'redis' => array(
+        {% for key, value in nextcloud_redis.items() -%}
+        {% if key != "enabled" -%}
+        '{{ key }}' => '{{ value }}',
+        {% endif -%}
+        {%- endfor %}
+    ),
+    {%- endif %}
+    {%- if nextcloud_trusted_proxies|length > 0 %}
+    'trusted_proxies' => array (
+    {%- for proxy in nextcloud_trusted_proxies %}
+        {{ loop.index0 }} => '{{ proxy }}',
+    {%- endfor %}
+    ),
+    {% endif -%}
+    {%- if nextcloud_additional_configuration %}
+    {% for key, value in nextcloud_additional_configuration.items() -%}
+    '{{ key }}' => '{{ value }}',
+    {%- endfor %}
+    {%- endif %}
+    {%- if nextcloud_additional_nested_configs -%}
+    {{ nextcloud_additional_nested_configs }}
+    {%- endif %}
+);
