@@ -5,6 +5,7 @@ $CONFIG = array(
     'datadirectory' => '{{ nextcloud_data_directory }}',
     'logfile' => '{{ nextcloud_log.file }}',
     'loglevel' => '{{ nextcloud_log.level }}',
+    'updater.release.channel' => '{{ nextcloud_release_channel }}',
     'trusted_domains' => array (
     {%- if nextcloud_domains|length > 0 %}
     {%- for domain in nextcloud_domains %}
@@ -20,7 +21,6 @@ $CONFIG = array(
     'dbname' => '{{ nextcloud_database.name }}',
     'dbhost' => '{{ nextcloud_database.host }}',
     'dbport' => '{{ nextcloud_database.port }}',
-    'dbtableprefix' => '{{ nextcloud_database.table_prefix }}',
     'dbuser' => '{{ nextcloud_database.user }}',
     'dbpassword' => '{{ nextcloud_database.password }}',
     {%- if nextcloud_database.type == 'mysql' %}

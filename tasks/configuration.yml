@@ -1,0 +1,23 @@
+---
+- name: "Create additional nextcloud configurations"
+  template:
+    src: "{{ nextcloud_configuration_template }}"
+    dest: "{{ nextcloud_configuration_override }}"
+    owner: "{{ nextcloud_owner }}"
+    group: "{{ nextcloud_group }}"
+    validate: "php -l %s"
+
+- name: "Create default cronjob"
+  cron:
+    name: "nextcloud default cronjob"
+    state: "{{ 'present' if nextcloud_cronjob.enabled else 'absent' }}"
+    user: "{{ nextcloud_owner }}"
+    cron_file: nextcloud
+    minute: "{{ nextcloud_cronjob.schedule.split(' ')[0] }}"
+    hour: "{{ nextcloud_cronjob.schedule.split(' ')[1] }}"
+    day: "{{ nextcloud_cronjob.schedule.split(' ')[2] }}"
+    month: "{{ nextcloud_cronjob.schedule.split(' ')[3] }}"
+    weekday: "{{ nextcloud_cronjob.schedule.split(' ')[4] }}"
+    job: "{{ nextcloud_cronjob.php_executable}} {{ nextcloud_directory }}/cron.php"
+    
+
