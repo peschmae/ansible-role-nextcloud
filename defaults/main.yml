@@ -83,13 +83,13 @@ nextcloud_additional_configuration: {}
 nextcloud_additional_nested_configs: ""
 
 nextcloud_apps:
-  - name: drawio
-    enabled: True
-    config:
-      DrawioAutosave: "yes"
-      DrawioLang: auto
-      DrawioOffline: "no"
-      DrawioTheme: "kennedy"
+  # - name: drawio
+  #   enabled: True
+  #   config:
+  #     DrawioAutosave: "yes"
+  #     DrawioLang: auto
+  #     DrawioOffline: "no"
+  #     DrawioTheme: "kennedy"
 
 nextcloud_cronjob:
   enabled: true
