@@ -34,7 +34,6 @@ nextcloud_log:
   file: "/var/log/nextcloud/nextcloud.log"
   level: 2
 
-
 nextcloud_default_language: "en"
 nextcloud_default_locale: "en_US"
 nextcloud_default_phone_region: "US"
@@ -82,6 +81,15 @@ nextcloud_additional_configuration: {}
 
 # use this option, if you have nested/complex configs, this will be put into the config just as is
 nextcloud_additional_nested_configs: ""
+
+nextcloud_apps:
+  - name: drawio
+    enabled: True
+    config:
+      DrawioAutosave: "yes"
+      DrawioLang: auto
+      DrawioOffline: "no"
+      DrawioTheme: "kennedy"
 
 nextcloud_cronjob:
   enabled: true

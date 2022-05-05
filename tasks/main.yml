@@ -1,2 +1,23 @@
 ---
 # tasks file for peschmae.nextcloud
+- name: Check if PHP exists
+  ansible.builtin.command: php -v
+  register: nextcloud_check_php
+  failed_when: nextcloud_check_php.rc != 0
+
+- name: "Check config.php is not empty"
+  stat:
+    path: "{{ nextcloud_configuration }}"
+  register: nextcloud_config_file
+  changed_when: False
+
+- import_tasks: download.yml
+  when: not nextcloud_config_file.stat.isreg
+
+- import_tasks: install.yml
+  when: not nextcloud_config_file.stat.isreg
+
+- import_tasks: configuration.yml
+
+- import_tasks: extensions.yml
+  with_items: nextcloud_apps
