@@ -1,0 +1,5 @@
+FROM bitnami/php-fpm
+
+RUN apt update && \
+    apt install -y python3 sudo netcat iputils-ping dnsutils && \
+    apt clean

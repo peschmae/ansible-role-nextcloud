@@ -1,0 +1,17 @@
+---
+- name: Converge
+  hosts: nextcloud
+  vars:
+    nextcloud_admin_password: molecule
+    nextcloud_php_executable: /opt/bitnami/php/bin/php
+    nextcloud_database:
+      type: mysql
+      name: nextcloud
+      hostname: mysql
+      port: 3306
+      username: nextcloud
+      password: nextcloud
+  tasks:
+    - name: "Include peschmae.nextcloud"
+      include_role:
+        name: "peschmae.nextcloud"

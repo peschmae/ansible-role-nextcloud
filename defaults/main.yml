@@ -15,9 +15,11 @@ nextcloud_data_directory: "/opt/ncdata"
 
 nextcloud_configuration_template: config.php.j2
 
+nextcloud_php_executable: php
+
 # owner/group for all files, as well as the cronjob
-nextcloud_owner: 33
-nextcloud_group: 33
+nextcloud_owner: www-data
+nextcloud_group: www-data
 
 nextcloud_passwordsalt: ""
 nextcloud_updatesecret: ""
@@ -94,14 +96,13 @@ nextcloud_apps:
 nextcloud_cronjob:
   enabled: true
   schedule: "*/5 * * * *"
-  php_executable: "php"
   # additional cronjobs
   additional: []
     # - name: nextcloud_preview-generate
-    #   command: "{{ nextcloud_cronjob.php_executable }} {{ nextcloud_directory }}/occ preview:pre-generate"
+    #   command: "{{ nextcloud_php_executable }} {{ nextcloud_directory }}/occ preview:pre-generate"
     #   schedule: "*/5 * * * *"
     #   enabled: true
     # - name: nextcloud_groupfolder-scan
-    #   command: "{{ nextcloud_cronjob.php_executable }} {{ nextcloud_directory }}/occ groupfolders:scan 1"
+    #   command: "{{ nextcloud_php_executable }} {{ nextcloud_directory }}/occ groupfolders:scan 1"
     #   schedule: "*/5 * * * *"
 

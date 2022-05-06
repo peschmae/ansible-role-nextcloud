@@ -13,10 +13,11 @@
 
 - name: "Define full download url"
   set_fact:
-    nextcloud_full_url: "{{ nextcloud_download_url, nextcloud_archive_format | join('.') }}"
+    nextcloud_download_url: "{{ (nextcloud_download_url, nextcloud_archive_format) | join('.') }}"
   when:
     # assuming the user set a custom download url
-    - nextcloud_download_url | split('.') | length == 0
+    - "'zip' not in nextcloud_download_url.split('.')[-1:]"
+    - "'bz2' not in nextcloud_download_url.split('.')[-1:]"
 
 - name: "Create nextcloud_directory with proper permissions"
   file:

@@ -1,4 +1,6 @@
 galaxy_info:
+  role_name: nextcloud
+  namespace: peschmae
   author: Mathias Petermann
   description: Installs nextcloud initially, and manages extensions & configuration. Does not support upgrading nextcloud! (Use the webui for it)
 

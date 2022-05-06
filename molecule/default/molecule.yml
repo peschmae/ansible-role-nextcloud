@@ -1,0 +1,32 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: mysql
+    image: mysql
+    pre_build_image: true
+    env:
+      MYSQL_ROOT_PASSWORD: molecule
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: nextcloud
+    exposed_ports:
+      - 3306/tcp
+    docker_networks:
+      - name: nextcloud
+    networks:
+      - name: nextcloud
+    override_command: False
+  - name: nextcloud
+    image: "bitnami/php-fpm"
+    pre_build_image: false
+    networks:
+      - name: nextcloud
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge.yml}
+verifier:
+  name: ansible

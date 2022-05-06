@@ -29,12 +29,12 @@
       path: "{{ nextcloud_configuration }}"
       state: absent
 
-  - name: "Install nextcloudu using OCC command"
+  - name: "Install nextcloud using OCC command"
     become_user: "{{ nextcloud_owner }}"
     become_flags: "{{ ansible_become_flags | default(omit) }}"
     become: yes
     command: >
-        php occ maintenance:install
+        {{ nextcloud_php_executable }} occ maintenance:install
         --database={{ nextcloud_database.type }}
         --database-host={{ nextcloud_database.hostname }}
         --database-port={{ nextcloud_database.port }}
@@ -47,7 +47,6 @@
     args:
       chdir: "{{ nextcloud_directory }}"
       creates: "{{ nextcloud_configuration }}"
-    notify: reload http
 
   - name: "Check config.php is not empty"
     stat:
@@ -56,7 +55,7 @@
     failed_when: nextcloud_config_size.stat.size is undefined or nextcloud_config_size.stat.size <= 100
 
   - name: "Verify php syntax"
-    command: "php -l {{ nextcloud_configuration }}"
+    command: "{{ nextcloud_php_executable }} -l {{ nextcloud_configuration }}"
     register: nextcloud_config_validate
     changed_when: False
     failed_when:

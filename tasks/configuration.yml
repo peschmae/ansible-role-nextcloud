@@ -18,7 +18,7 @@
     day: "{{ nextcloud_cronjob.schedule.split(' ')[2] }}"
     month: "{{ nextcloud_cronjob.schedule.split(' ')[3] }}"
     weekday: "{{ nextcloud_cronjob.schedule.split(' ')[4] }}"
-    job: "{{ nextcloud_cronjob.php_executable}} {{ nextcloud_directory }}/cron.php"
+    job: "{{ nextcloud_php_executable }} {{ nextcloud_directory }}/cron.php"
 
 - name: "Create additional cronjobs"
   cron:

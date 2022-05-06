@@ -12,12 +12,12 @@
   changed_when: False
 
 - import_tasks: download.yml
-  when: not nextcloud_config_file.stat.isreg
+  when: "'isreg' not in nextcloud_config_file.stat"
 
 - import_tasks: install.yml
-  when: not nextcloud_config_file.stat.isreg
+  when: "'isreg' not in nextcloud_config_file.stat"
 
 - import_tasks: configuration.yml
 
-- import_tasks: extensions.yml
+- include_tasks: extensions.yml
   with_items: nextcloud_apps

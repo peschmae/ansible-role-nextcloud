@@ -1,0 +1,14 @@
+---
+- name: Install requirements
+  hosts: nextcloud
+  tasks:
+    - name: create www-data group
+      group:
+        name: www-data
+        gid: 33
+
+    - name: create www-data user
+      user:
+        name: www-data
+        uid: 33
+        group: www-data
