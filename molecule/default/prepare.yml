@@ -3,12 +3,12 @@
   hosts: nextcloud
   tasks:
     - name: create www-data group
-      group:
+      ansible.builtin.group:
         name: www-data
         gid: 33
 
     - name: create www-data user
-      user:
+      ansible.builtin.user:
         name: www-data
         uid: 33
         group: www-data

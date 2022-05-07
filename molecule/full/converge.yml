@@ -19,5 +19,5 @@
         schedule: "*/5 * * * *"
   tasks:
     - name: "Include peschmae.nextcloud"
-      include_role:
+      ansible.builtin.include_role:
         name: "peschmae.nextcloud"
