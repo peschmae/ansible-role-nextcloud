@@ -1,4 +1,22 @@
 ---
+- name: Create updater.secret
+  ansible.builtin.command: "{{ nextcloud_php_executable }} -r 'echo password_hash(\"{{ nextcloud_updatesecret }}\", PASSWORD_DEFAULT);'"
+  register: nextcloud_updatesecret_hashed_tmp
+
+- name: Debug nextcloud_updatesecret_hashed
+  debug:
+    vars: nextcloud_updatesecret_hashed_tmp
+    verbosity: 2
+
+- name: Set hashed updater.secret
+  set_fact:
+    nextcloud_updatesecret_hashed: nextcloud_updatesecret_hashed_tmp.stdout[0]
+
+- name: Debug nextcloud_updatesecret_hashed
+  debug:
+    vars: nextcloud_updatesecret_hashed
+    verbosity: 2
+
 - name: Create additional nextcloud configurations
   ansible.builtin.template:
     src: "{{ nextcloud_configuration_template }}"
@@ -33,7 +51,7 @@
     month: "{{ item.schedule.split(' ')[3] }}"
     weekday: "{{ item.schedule.split(' ')[4] }}"
     job: "{{ item.command }}"
-  with_items: "{{ nextcloud_cronjob.additional }}"
+  with_items: "{{ nextcloud_cronjob_additional }}"
 
 - block:
     - name: Check if logrotate exists

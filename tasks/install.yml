@@ -35,12 +35,12 @@
       become: true
       ansible.builtin.command: >
         {{ nextcloud_php_executable }} occ maintenance:install
-        --database={{ nextcloud_database.type }}
-        --database-host={{ nextcloud_database.hostname }}
-        --database-port={{ nextcloud_database.port }}
-        --database-name={{ nextcloud_database.name }}
-        --database-user={{ nextcloud_database.username }}
-        --database-pass={{ nextcloud_database.password }}
+        --database={{ nextcloud_database_type }}
+        --database-host={{ nextcloud_database_hostname }}
+        --database-port={{ nextcloud_database_port }}
+        --database-name={{ nextcloud_database_name }}
+        --database-user={{ nextcloud_database_username }}
+        --database-pass={{ nextcloud_database_password }}
         --admin-user={{ nextcloud_admin_user }}
         --admin-pass={{ nextcloud_admin_password }}
         --data-dir={{ nextcloud_data_directory }}

@@ -21,7 +21,6 @@ nextcloud_php_executable: php
 nextcloud_owner: www-data
 nextcloud_group: www-data
 
-nextcloud_passwordsalt: ""
 nextcloud_updatesecret: ""
 
 nextcloud_admin_user: ncadmin
@@ -41,34 +40,34 @@ nextcloud_default_locale: en_US
 nextcloud_default_phone_region: US
 
 # will be dumped as array into `redis`
+nextcloud_redis_enabled: false
 nextcloud_redis:
-  enabled: false
   host: 127.0.0.1
   port: 6379
   dbindex: 1
 
-nextcloud_database:
-  type: mysql
-  name: nextcloud
-  hostname: 127.0.0.1
-  port: 3306
-  username: nextcloud
-  password: nextcloud
+nextcloud_database_type: mysql
+
+nextcloud_database_name: nextcloud
+nextcloud_database_hostname: 127.0.0.1
+nextcloud_database_port: 3306
+nextcloud_database_username: nextcloud
+nextcloud_database_password: nextcloud
 
 # will be prefixerd with `mail_` in config file
-nextcloud_mail:
-  enabled: false
-  smtpmode: smtp
-  smtpsecure: ssl
-  sendmailmode: smtp
-  from_address: nextcloud
-  domain: "{{ nextcloud_domains[0] }}"
-  smtphost: ""
-  smtpport: 456
-  pauth: 1
-  pauthtype: LOGIN
-  smtpname: nextcloud
-  smtppassword: ""
+nextcloud_mail_enabled: false
+nextcloud_mail: {}
+# smtpmode: smtp
+# smtpsecure: ssl
+# sendmailmode: smtp
+# from_address: nextcloud
+# domain: "{{ nextcloud_domains[0] }}"
+# smtphost: ""
+# smtpport: 456
+# pauth: 1
+# pauthtype: LOGIN
+# smtpname: nextcloud
+# smtppassword: ""
 
 # nextcloud trusted domains
 nextcloud_domains:
@@ -99,12 +98,13 @@ nextcloud_apps: []
 nextcloud_cronjob:
   enabled: true
   schedule: "*/5 * * * *"
-  # additional cronjobs
-  additional: []
-    # - name: nextcloud_preview-generate
-    #   command: "{{ nextcloud_php_executable }} {{ nextcloud_directory }}/occ preview:pre-generate"
-    #   schedule: "*/5 * * * *"
-    #   enabled: true
-    # - name: nextcloud_groupfolder-scan
-    #   command: "{{ nextcloud_php_executable }} {{ nextcloud_directory }}/occ groupfolders:scan 1"
-    #   schedule: "*/5 * * * *"
+
+# additional cronjobs
+nextcloud_cronjob_additional: []
+  # - name: nextcloud_preview-generate
+  #   command: "{{ nextcloud_php_executable }} {{ nextcloud_directory }}/occ preview:pre-generate"
+  #   schedule: "*/5 * * * *"
+  #   enabled: true
+  # - name: nextcloud_groupfolder-scan
+  #   command: "{{ nextcloud_php_executable }} {{ nextcloud_directory }}/occ groupfolders:scan 1"
+  #   schedule: "*/5 * * * *"

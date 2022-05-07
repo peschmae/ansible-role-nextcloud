@@ -13,6 +13,10 @@
           theme_login_page: "1"
       - name: drawio
         enabled: False
+    nextcloud_cronjob_additional:
+      - name: nextcloud_groupfolder-scan
+        command: "{{ nextcloud_php_executable }} {{ nextcloud_directory }}/occ groupfolders:scan 1"
+        schedule: "*/5 * * * *"
   tasks:
     - name: "Include peschmae.nextcloud"
       include_role:

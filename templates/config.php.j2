@@ -1,7 +1,6 @@
 <?php
 $CONFIG = array(
-    'passwordsalt' => '{{ nextcloud_passwordsalt }}',
-    'secret' => '{{ nextcloud_updatesecret }}',
+    'updater.secret' => '{{ nextcloud_updatesecret_hashed }}',
     'datadirectory' => '{{ nextcloud_data_directory }}',
     'logfile' => '{{ nextcloud_log.file }}',
     'loglevel' => '{{ nextcloud_log.level }}',
@@ -17,29 +16,25 @@ $CONFIG = array(
     ),
     'overwrite.cli.url' => '{{ nextcloud_overwrite_cli_uri }}',
     // database configuration
-    'dbtype' => '{{ nextcloud_database.type }}',
-    'dbname' => '{{ nextcloud_database.name }}',
-    'dbhost' => '{{ nextcloud_database.hostname }}',
-    'dbport' => '{{ nextcloud_database.port }}',
-    'dbuser' => '{{ nextcloud_database.username }}',
-    'dbpassword' => '{{ nextcloud_database.password }}',
-    {%- if nextcloud_database.type == 'mysql' %}
+    'dbtype' => '{{ nextcloud_database_type }}',
+    'dbname' => '{{ nextcloud_database_name }}',
+    'dbhost' => '{{ nextcloud_database_hostname }}',
+    'dbport' => '{{ nextcloud_database_port }}',
+    'dbuser' => '{{ nextcloud_database_username }}',
+    'dbpassword' => '{{ nextcloud_database_password }}',
+    {%- if nextcloud_database_type == 'mysql' %}
     'mysql.utf8mb4' => true,
     {%- endif %}
-    {%- if nextcloud_mail.enabled  %}
+    {%- if nextcloud_mail_enabled  %}
     // mail configuration
         {% for key, value in nextcloud_mail.items() -%}
-        {% if key != "enabled" -%}
             'mail_{{ key }}' => '{{ value }}',
-        {% endif -%}
         {%- endfor %}
     {%- endif %}
-    {%- if nextcloud_redis.enabled  %}
+    {%- if nextcloud_redis_enabled  %}
     'redis' => array(
         {% for key, value in nextcloud_redis.items() -%}
-        {% if key != "enabled" -%}
         '{{ key }}' => '{{ value }}',
-        {% endif -%}
         {%- endfor %}
     ),
     {%- endif %}

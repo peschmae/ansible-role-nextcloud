@@ -1,7 +1,7 @@
 ---
 # tasks file for peschmae.nextcloud
 - name: Check if PHP exists
-  ansible.builtin.command: php -v
+  ansible.builtin.command: "{{ nextcloud_php_executable }} -v"
   register: nextcloud_check_php
   failed_when: nextcloud_check_php.rc != 0
   changed_when: false
