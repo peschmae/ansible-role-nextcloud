@@ -1,17 +1,17 @@
 ---
-- name: "Install unzip if needed"
+- name: Install unzip if needed
   package:
     name: unzip
     state: present
   when: nextcloud_archive_format == "zip" or 'zip' in nextcloud_download_url.split('.')[-1:]
 
-- name: "Install bunzip2 if needed"
+- name: Install bunzip2 if needed
   package:
     name: bzip2
     state: present
   when: nextcloud_archive_format == "tar.bz2" or 'bz2' in nextcloud_download_url.split('.')[-1:]
 
-- name: "Define full download url"
+- name: Define full download url
   set_fact:
     nextcloud_download_url: "{{ (nextcloud_download_url, nextcloud_archive_format) | join('.') }}"
   when:
@@ -19,29 +19,29 @@
     - "'zip' not in nextcloud_download_url.split('.')[-1:]"
     - "'bz2' not in nextcloud_download_url.split('.')[-1:]"
 
-- name: "Create nextcloud_directory with proper permissions"
+- name: Create nextcloud_directory with proper permissions
   file:
     path: "{{ nextcloud_directory }}"
-    mode: "u=rwX,g=rX,o-rwx"
-    recurse: True
+    mode: u=rwX,g=rX,o-rwx
+    recurse: true
     state: directory
     owner: "{{ nextcloud_owner }}"
     group: "{{ nextcloud_group }}"
 
 - block:
-  - name: "Download & extract Nextcloud to /tmp"
-    unarchive:
-      copy: False
-      src: "{{ nextcloud_download_url }}"
-      dest: "/tmp/"
+    - name: Download & extract Nextcloud to /tmp
+      unarchive:
+        copy: false
+        src: "{{ nextcloud_download_url }}"
+        dest: /tmp/
 
-  - name: "Move extracted files to {{ nextcloud_directory }}"
-    copy:
-      src: "/tmp/nextcloud/"
-      dest: "{{ nextcloud_directory }}"
-      remote_src: True
+    - name: Move extracted files to {{ nextcloud_directory }}
+      copy:
+        src: /tmp/nextcloud/
+        dest: "{{ nextcloud_directory }}"
+        remote_src: true
 
-  - name: "Cleanup nextcloud downloads"
-    file:
-      path: /tmp/nextcloud
-      state: absent
+    - name: Cleanup nextcloud downloads
+      file:
+        path: /tmp/nextcloud
+        state: absent

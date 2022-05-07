@@ -1,8 +1,8 @@
 ---
 # used for download
 # if you want a specific version, override this var
-nextcloud_download_url: 'https://download.nextcloud.com/server/releases/latest'
-nextcloud_archive_format: 'zip'
+nextcloud_download_url: https://download.nextcloud.com/server/releases/latest
+nextcloud_archive_format: zip
 nextcloud_release_channel: stable
 
 # defaults file for peschmae.nextcloud
@@ -11,7 +11,7 @@ nextcloud_configuration: "{{ nextcloud_directory }}/config/config.php"
 nextcloud_configuration_override: "{{ nextcloud_directory }}/config/override.config.php"
 nextcloud_skeleton_directory: "{{ nextcloud_directory }}/core/skeleton"
 # should be outside the webdir
-nextcloud_data_directory: "/opt/ncdata"
+nextcloud_data_directory: /opt/ncdata
 
 nextcloud_configuration_template: config.php.j2
 
@@ -33,12 +33,12 @@ nextcloud_log:
     keep_days: 14
     template: logrotate.conf.j2
     dest: /etc/logrotate.d/nextcloud
-  file: "/var/log/nextcloud/nextcloud.log"
+  file: /var/log/nextcloud/nextcloud.log
   level: 2
 
-nextcloud_default_language: "en"
-nextcloud_default_locale: "en_US"
-nextcloud_default_phone_region: "US"
+nextcloud_default_language: en
+nextcloud_default_locale: en_US
+nextcloud_default_phone_region: US
 
 # will be dumped as array into `redis`
 nextcloud_redis:
@@ -66,37 +66,35 @@ nextcloud_mail:
   smtphost: ""
   smtpport: 456
   pauth: 1
-  pauthtype: "LOGIN"
-  smtpname: "nextcloud"
+  pauthtype: LOGIN
+  smtpname: nextcloud
   smtppassword: ""
 
 # nextcloud trusted domains
 nextcloud_domains:
   - localhost
   - "{{ ansible_host }}"
-nextcloud_overwrite_cli_uri: "http://{{ nextcloud_domains[0] }}"
+nextcloud_overwrite_cli_uri: http://{{ nextcloud_domains[0] }}
 
 nextcloud_trusted_proxies: []
-
 # must be key:value pairs, that can be added to the nextcloud configuration, currently doesn't support nested key
 nextcloud_additional_configuration: {}
-
 # use this option, if you have nested/complex configs, this will be put into the config just as is
 nextcloud_additional_nested_configs: ""
 
 nextcloud_apps: []
-  # - name: breezedark
-  #   enabled: True
-  #   config:
-  #     theme_enabled: "1"
-  #     theme_login_page: "1"
-  # - name: drawio
-  #   enabled: False
-  #   config:
-  #     DrawioAutosave: "yes"
-  #     DrawioLang: auto
-  #     DrawioOffline: "no"
-  #     DrawioTheme: "kennedy"
+# - name: breezedark
+#   enabled: True
+#   config:
+#     theme_enabled: "1"
+#     theme_login_page: "1"
+# - name: drawio
+#   enabled: False
+#   config:
+#     DrawioAutosave: "yes"
+#     DrawioLang: auto
+#     DrawioOffline: "no"
+#     DrawioTheme: "kennedy"
 
 nextcloud_cronjob:
   enabled: true

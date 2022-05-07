@@ -1,39 +1,39 @@
 ---
 # Download nextcloud version, unpack to specified directory, create configuration file
-- name: "Create data directory"
+- name: Create data directory
   file:
     path: "{{ nextcloud_data_directory }}"
-    mode: "u=rwX,g=rX,o-rwx"
-    recurse: True
+    mode: u=rwX,g=rX,o-rwx
+    recurse: true
     state: directory
     owner: "{{ nextcloud_owner }}"
     group: "{{ nextcloud_group }}"
 
-- name: "Allow changes to install directory"
+- name: Allow changes to install directory
   file:
     path: "{{ nextcloud_directory }}"
     state: directory
-    recurse: True
+    recurse: true
     owner: "{{ nextcloud_owner }}"
     group: "{{ nextcloud_group }}"
 
-- name: "Warn if password was not changed"
+- name: Warn if password was not changed
   pause:
-    prompt: "nextcloud_admin_password is 'nextcloud', make sure to change this after installation! Press enter to confirm"
+    prompt: nextcloud_admin_password is 'nextcloud', make sure to change this after installation! Press enter to confirm
   when:
     - nextcloud_admin_password == 'nextcloud'
 
 - block:
-  - name: "Ensure no config.php is present"
-    file:
-      path: "{{ nextcloud_configuration }}"
-      state: absent
+    - name: Ensure no config.php is present
+      file:
+        path: "{{ nextcloud_configuration }}"
+        state: absent
 
-  - name: "Install nextcloud using OCC command"
-    become_user: "{{ nextcloud_owner }}"
-    become_flags: "{{ ansible_become_flags | default(omit) }}"
-    become: True
-    command: >
+    - name: Install nextcloud using OCC command
+      become_user: "{{ nextcloud_owner }}"
+      become_flags: "{{ ansible_become_flags | default(omit) }}"
+      become: true
+      command: >
         {{ nextcloud_php_executable }} occ maintenance:install
         --database={{ nextcloud_database.type }}
         --database-host={{ nextcloud_database.hostname }}
@@ -44,27 +44,27 @@
         --admin-user={{ nextcloud_admin_user }}
         --admin-pass={{ nextcloud_admin_password }}
         --data-dir={{ nextcloud_data_directory }}
-    args:
-      chdir: "{{ nextcloud_directory }}"
-      creates: "{{ nextcloud_configuration }}"
+      args:
+        chdir: "{{ nextcloud_directory }}"
+        creates: "{{ nextcloud_configuration }}"
 
-  - name: "Check config.php is not empty"
-    stat:
-      path: "{{ nextcloud_configuration }}"
-    register: nextcloud_config_size
-    failed_when: nextcloud_config_size.stat.size is undefined or nextcloud_config_size.stat.size <= 100
+    - name: Check config.php is not empty
+      stat:
+        path: "{{ nextcloud_configuration }}"
+      register: nextcloud_config_size
+      failed_when: nextcloud_config_size.stat.size is undefined or nextcloud_config_size.stat.size <= 100
 
-  - name: "Verify php syntax"
-    command: "{{ nextcloud_php_executable }} -l {{ nextcloud_configuration }}"
-    register: nextcloud_config_validate
-    changed_when: False
-    failed_when:
-      - nextcloud_config_validate.rc is defined
-      - nextcloud_config_validate.rc != 0
+    - name: Verify php syntax
+      command: "{{ nextcloud_php_executable }} -l {{ nextcloud_configuration }}"
+      register: nextcloud_config_validate
+      changed_when: false
+      failed_when:
+        - nextcloud_config_validate.rc is defined
+        - nextcloud_config_validate.rc != 0
 
   rescue:
-    - name: "Cleanup if installation failed"
+    - name: Cleanup if installation failed
       file:
         path: "{{ nextcloud_configuration }}"
         state: absent
-      failed_when: True
+      failed_when: true
