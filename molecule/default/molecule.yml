@@ -14,6 +14,7 @@ platforms:
       MYSQL_PASSWORD: nextcloud
     exposed_ports:
       - 3306/tcp
+    network_mode: bridge
     docker_networks:
       - name: nextcloud
     networks:
@@ -22,6 +23,7 @@ platforms:
   - name: nextcloud
     image: "bitnami/php-fpm"
     pre_build_image: false
+    network_mode: bridge
     networks:
       - name: nextcloud
 provisioner:
