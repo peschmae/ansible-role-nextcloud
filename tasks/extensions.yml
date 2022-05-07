@@ -9,37 +9,58 @@
   args:
     chdir: "{{ nextcloud_directory }}"
   register: nextcloud_installed_apps
+  changed_when: False
 
-- name: "Install the extension if needed"
-  become_user: "{{ nextcloud_owner }}"
-  become_flags: "{{ ansible_become_flags | default(omit) }}"
-  become: True
-  command: "{{ nextcloud_php_executable }} occ app:install {{ item.name }}"
-  args:
-    chdir: "{{ nextcloud_directory }}"
-  when:
-    - item.enabled
-    - item.name not in nextcloud_installed_apps.stdout
+- name: "Trying to install extension {{ item.name }}"
+  block:
+    - name: "Install the extension if needed"
+      become_user: "{{ nextcloud_owner }}"
+      become_flags: "{{ ansible_become_flags | default(omit) }}"
+      become: True
+      command: "{{ nextcloud_php_executable }} occ app:install {{ item.name }}"
+      args:
+        chdir: "{{ nextcloud_directory }}"
+      when:
+        - item.enabled
+        - item.name not in nextcloud_installed_apps.stdout
 
-- name: "enable/disable the extension"
-  become_user: "{{ nextcloud_owner }}"
-  become_flags: "{{ ansible_become_flags | default(omit) }}"
-  become: True
-  command: "{{ nextcloud_php_executable }} occ app:{{ 'enable' if item.enabled else 'disable' }} {{ item.name }}"
-  args:
-    chdir: "{{ nextcloud_directory }}"
-  when: item.name in nextcloud_installed_apps.stdout
+    - name: "enable the extension (if installed and disabled)"
+      become_user: "{{ nextcloud_owner }}"
+      become_flags: "{{ ansible_become_flags | default(omit) }}"
+      become: True
+      command: "{{ nextcloud_php_executable }} occ app:enable {{ item.name }}"
+      args:
+        chdir: "{{ nextcloud_directory }}"
+      when:
+        - item.name in (nextcloud_installed_apps.stdout | from_json).disabled
+        - item.enabled
 
-- name: "Configure extension {{ item.name }}"
-  become_user: "{{ nextcloud_owner }}"
-  become_flags: "{{ ansible_become_flags | default(omit) }}"
-  become: True
-  command: "{{ nextcloud_php_executable }} occ config:app:set {{ item.name }} {{ cfg_item.key }} --value='{{ cfg_item.value }}'"
-  args:
-    chdir: "{{ nextcloud_directory }}"
-  with_dict: "{{ item.config | default({}) }}"
-  loop_control:
-        loop_var: cfg_item
-  when:
-  - item.enabled
-  - item.config is defined
+    - name: "disable the extension"
+      become_user: "{{ nextcloud_owner }}"
+      become_flags: "{{ ansible_become_flags | default(omit) }}"
+      become: True
+      command: "{{ nextcloud_php_executable }} occ app:disable {{ item.name }}"
+      args:
+        chdir: "{{ nextcloud_directory }}"
+      when:
+        - item.name in (nextcloud_installed_apps.stdout | from_json).enabled
+        - not item.enabled
+
+    - name: "Configure extension {{ item.name }}"
+      become_user: "{{ nextcloud_owner }}"
+      become_flags: "{{ ansible_become_flags | default(omit) }}"
+      become: True
+      command: "{{ nextcloud_php_executable }} occ config:app:set {{ item.name }} {{ cfg_item.key }} --value='{{ cfg_item.value }}'"
+      args:
+        chdir: "{{ nextcloud_directory }}"
+      with_dict: "{{ item.config | default({}) }}"
+      loop_control:
+            loop_var: cfg_item
+      when:
+      - item.enabled
+      - item.config is defined
+      tags:
+        - molecule-idempotence-notest
+  rescue:
+    - debug:
+        msg: "Installation of app {{ item.name }} failed... See errro above for more information."

@@ -12,13 +12,13 @@
       username: nextcloud
       password: nextcloud
     nextcloud_apps:
-      - name: drawio
+      - name: breezedark
         enabled: True
         config:
-          DrawioAutosave: "yes"
-          DrawioLang: auto
-          DrawioOffline: "no"
-          DrawioTheme: "kennedy"
+          theme_enabled: "1"
+          theme_login_page: "1"
+      - name: drawio
+        enabled: True
   tasks:
     - name: "Include peschmae.nextcloud"
       include_role:

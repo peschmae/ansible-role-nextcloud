@@ -4,6 +4,7 @@
   ansible.builtin.command: php -v
   register: nextcloud_check_php
   failed_when: nextcloud_check_php.rc != 0
+  changed_when: False
 
 - name: "Check config.php is not empty"
   stat:
