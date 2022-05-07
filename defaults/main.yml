@@ -85,8 +85,13 @@ nextcloud_additional_configuration: {}
 nextcloud_additional_nested_configs: ""
 
 nextcloud_apps: []
-  # - name: drawio
+  # - name: breezedark
   #   enabled: True
+  #   config:
+  #     theme_enabled: "1"
+  #     theme_login_page: "1"
+  # - name: drawio
+  #   enabled: False
   #   config:
   #     DrawioAutosave: "yes"
   #     DrawioLang: auto
@@ -105,4 +110,3 @@ nextcloud_cronjob:
     # - name: nextcloud_groupfolder-scan
     #   command: "{{ nextcloud_php_executable }} {{ nextcloud_directory }}/occ groupfolders:scan 1"
     #   schedule: "*/5 * * * *"
-

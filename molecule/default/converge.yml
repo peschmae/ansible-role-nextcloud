@@ -18,7 +18,7 @@
           theme_enabled: "1"
           theme_login_page: "1"
       - name: drawio
-        enabled: True
+        enabled: False
   tasks:
     - name: "Include peschmae.nextcloud"
       include_role:

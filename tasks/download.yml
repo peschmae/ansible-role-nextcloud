@@ -1,15 +1,15 @@
 ---
-- name: "Check if Unzip is installed"
-  package: 
-    name: unzip 
+- name: "Install unzip if needed"
+  package:
+    name: unzip
     state: present
-  when: nextcloud_archive_format == "zip"
+  when: nextcloud_archive_format == "zip" or 'zip' in nextcloud_download_url.split('.')[-1:]
 
-- name: "Check if bunzip2 is installed"
-  package: 
-    name: bzip2 
+- name: "Install bunzip2 if needed"
+  package:
+    name: bzip2
     state: present
-  when: nextcloud_archive_format == "tar.bz2"
+  when: nextcloud_archive_format == "tar.bz2" or 'bz2' in nextcloud_download_url.split('.')[-1:]
 
 - name: "Define full download url"
   set_fact:
@@ -23,7 +23,7 @@
   file:
     path: "{{ nextcloud_directory }}"
     mode: "u=rwX,g=rX,o-rwx"
-    recurse: yes
+    recurse: True
     state: directory
     owner: "{{ nextcloud_owner }}"
     group: "{{ nextcloud_group }}"
@@ -31,7 +31,7 @@
 - block:
   - name: "Download & extract Nextcloud to /tmp"
     unarchive:
-      copy: no
+      copy: False
       src: "{{ nextcloud_download_url }}"
       dest: "/tmp/"
 
@@ -39,9 +39,9 @@
     copy:
       src: "/tmp/nextcloud/"
       dest: "{{ nextcloud_directory }}"
-      remote_src: true
+      remote_src: True
 
   - name: "Cleanup nextcloud downloads"
-    file: 
-      path: /tmp/nextcloud 
+    file:
+      path: /tmp/nextcloud
       state: absent

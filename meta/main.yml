@@ -15,7 +15,7 @@ galaxy_info:
   # - GPL-3.0-only
   # - Apache-2.0
   # - CC-BY-4.0
-  license: license (GPL-2.0-or-later, MIT, etc)
+  license: MIT
 
   min_ansible_version: 4.1
 
@@ -28,7 +28,11 @@ galaxy_info:
   # To view available platforms and versions (or releases), visit:
   # https://galaxy.ansible.com/api/v1/platforms/
   #
-  # platforms:
+  platforms:
+    - name: Debian
+      versions:
+        - 10
+        - 11
   # - name: Fedora
   #   versions:
   #   - all

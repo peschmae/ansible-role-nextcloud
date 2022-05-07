@@ -32,7 +32,7 @@
   - name: "Install nextcloud using OCC command"
     become_user: "{{ nextcloud_owner }}"
     become_flags: "{{ ansible_become_flags | default(omit) }}"
-    become: yes
+    become: True
     command: >
         {{ nextcloud_php_executable }} occ maintenance:install
         --database={{ nextcloud_database.type }}

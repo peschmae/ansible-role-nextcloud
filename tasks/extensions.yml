@@ -11,6 +11,10 @@
   register: nextcloud_installed_apps
   changed_when: False
 
+- debug:
+    var: (nextcloud_installed_apps.stdout | from_json)
+    verbosity: 2
+
 - name: "Trying to install extension {{ item.name }}"
   block:
     - name: "Install the extension if needed"
@@ -22,7 +26,8 @@
         chdir: "{{ nextcloud_directory }}"
       when:
         - item.enabled
-        - item.name not in nextcloud_installed_apps.stdout
+        - item.name not in (nextcloud_installed_apps.stdout | from_json).enabled
+        - item.name not in (nextcloud_installed_apps.stdout | from_json).disabled
 
     - name: "enable the extension (if installed and disabled)"
       become_user: "{{ nextcloud_owner }}"
