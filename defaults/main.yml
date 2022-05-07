@@ -84,7 +84,7 @@ nextcloud_additional_configuration: {}
 # use this option, if you have nested/complex configs, this will be put into the config just as is
 nextcloud_additional_nested_configs: ""
 
-nextcloud_apps:
+nextcloud_apps: []
   # - name: drawio
   #   enabled: True
   #   config:

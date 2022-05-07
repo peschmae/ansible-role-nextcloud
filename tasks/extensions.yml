@@ -4,8 +4,8 @@
 - name: "Get list of installed extensions"
   become_user: "{{ nextcloud_owner }}"
   become_flags: "{{ ansible_become_flags | default(omit) }}"
-  become: yes
-  command: php occ app:list --output=json"
+  become: True
+  command: "{{ nextcloud_php_executable }} occ app:list --output=json"
   args:
     chdir: "{{ nextcloud_directory }}"
   register: nextcloud_installed_apps
@@ -13,8 +13,8 @@
 - name: "Install the extension if needed"
   become_user: "{{ nextcloud_owner }}"
   become_flags: "{{ ansible_become_flags | default(omit) }}"
-  become: yes
-  command: "php occ app:install {{ item.name }}"
+  become: True
+  command: "{{ nextcloud_php_executable }} occ app:install {{ item.name }}"
   args:
     chdir: "{{ nextcloud_directory }}"
   when:
@@ -24,8 +24,8 @@
 - name: "enable/disable the extension"
   become_user: "{{ nextcloud_owner }}"
   become_flags: "{{ ansible_become_flags | default(omit) }}"
-  become: yes
-  command: "php occ app:{{ 'enable' if item.enabled else 'disable' }} {{ item.name }}"
+  become: True
+  command: "{{ nextcloud_php_executable }} occ app:{{ 'enable' if item.enabled else 'disable' }} {{ item.name }}"
   args:
     chdir: "{{ nextcloud_directory }}"
   when: item.name in nextcloud_installed_apps.stdout
@@ -33,13 +33,13 @@
 - name: "Configure extension {{ item.name }}"
   become_user: "{{ nextcloud_owner }}"
   become_flags: "{{ ansible_become_flags | default(omit) }}"
-  become: yes
-  command: "php occ config:app:set {{ item.name }} {{ cfg_item.key }} --value='{{ cfg_item.value }}'"
+  become: True
+  command: "{{ nextcloud_php_executable }} occ config:app:set {{ item.name }} {{ cfg_item.key }} --value='{{ cfg_item.value }}'"
   args:
     chdir: "{{ nextcloud_directory }}"
   with_dict: "{{ item.config | default({}) }}"
   loop_control:
         loop_var: cfg_item
-when:
-- item.enabled
-- item.config is defined
+  when:
+  - item.enabled
+  - item.config is defined

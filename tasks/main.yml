@@ -20,4 +20,4 @@
 - import_tasks: configuration.yml
 
 - include_tasks: extensions.yml
-  with_items: nextcloud_apps
+  with_items: "{{ nextcloud_apps }}"

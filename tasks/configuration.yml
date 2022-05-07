@@ -35,10 +35,10 @@
   with_items: "{{ nextcloud_cronjob.additional }}"
 
 - block:
-    - name: "Check if logrotate is installed"
-      package:
-        name: logrotate
-        state: present
+    - name: Check if logrotate exists
+      ansible.builtin.command: logrotate --version
+      register: nextcloud_check_logrotate
+      failed_when: nextcloud_check_logrotate.rc != 0
 
     - name: "Create logrotate config for nextcloud logs"
       template:
@@ -47,5 +47,5 @@
   rescue:
      - name: Logrotate enabled, but package not present
        ansible.builtin.debug:
-         msg: 'Tried to create the logroate config, but no package named logrotate is installedßå'
+         msg: 'Tried to create the logroate config, but no package named logrotate is installed'
   when: nextcloud_log.rotate.enabled

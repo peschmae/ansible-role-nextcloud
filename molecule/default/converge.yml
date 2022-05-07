@@ -11,6 +11,14 @@
       port: 3306
       username: nextcloud
       password: nextcloud
+    nextcloud_apps:
+      - name: drawio
+        enabled: True
+        config:
+          DrawioAutosave: "yes"
+          DrawioLang: auto
+          DrawioOffline: "no"
+          DrawioTheme: "kennedy"
   tasks:
     - name: "Include peschmae.nextcloud"
       include_role:

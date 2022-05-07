@@ -19,9 +19,9 @@ $CONFIG = array(
     // database configuration
     'dbtype' => '{{ nextcloud_database.type }}',
     'dbname' => '{{ nextcloud_database.name }}',
-    'dbhost' => '{{ nextcloud_database.host }}',
+    'dbhost' => '{{ nextcloud_database.hostname }}',
     'dbport' => '{{ nextcloud_database.port }}',
-    'dbuser' => '{{ nextcloud_database.user }}',
+    'dbuser' => '{{ nextcloud_database.username }}',
     'dbpassword' => '{{ nextcloud_database.password }}',
     {%- if nextcloud_database.type == 'mysql' %}
     'mysql.utf8mb4' => true,
