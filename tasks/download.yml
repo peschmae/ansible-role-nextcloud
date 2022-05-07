@@ -1,18 +1,18 @@
 ---
 - name: Install unzip if needed
-  package:
+  ansible.builtin.package:
     name: unzip
     state: present
   when: nextcloud_archive_format == "zip" or 'zip' in nextcloud_download_url.split('.')[-1:]
 
 - name: Install bunzip2 if needed
-  package:
+  ansible.builtin.package:
     name: bzip2
     state: present
   when: nextcloud_archive_format == "tar.bz2" or 'bz2' in nextcloud_download_url.split('.')[-1:]
 
 - name: Define full download url
-  set_fact:
+  ansible.builtin.set_fact:
     nextcloud_download_url: "{{ (nextcloud_download_url, nextcloud_archive_format) | join('.') }}"
   when:
     # assuming the user set a custom download url
@@ -20,7 +20,7 @@
     - "'bz2' not in nextcloud_download_url.split('.')[-1:]"
 
 - name: Create nextcloud_directory with proper permissions
-  file:
+  ansible.builtin.file:
     path: "{{ nextcloud_directory }}"
     mode: u=rwX,g=rX,o-rwx
     recurse: true
@@ -30,18 +30,21 @@
 
 - block:
     - name: Download & extract Nextcloud to /tmp
-      unarchive:
+      ansible.builtin.unarchive:
         copy: false
         src: "{{ nextcloud_download_url }}"
         dest: /tmp/
 
     - name: Move extracted files to {{ nextcloud_directory }}
-      copy:
+      ansible.builtin.copy:
         src: /tmp/nextcloud/
         dest: "{{ nextcloud_directory }}"
+        mode: u=rwX,g=rX,o-rwx
+        owner: "{{ nextcloud_owner }}"
+        group: "{{ nextcloud_group }}"
         remote_src: true
 
     - name: Cleanup nextcloud downloads
-      file:
+      ansible.builtin.file:
         path: /tmp/nextcloud
         state: absent

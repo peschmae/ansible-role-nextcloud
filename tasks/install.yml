@@ -1,7 +1,7 @@
 ---
 # Download nextcloud version, unpack to specified directory, create configuration file
 - name: Create data directory
-  file:
+  ansible.builtin.file:
     path: "{{ nextcloud_data_directory }}"
     mode: u=rwX,g=rX,o-rwx
     recurse: true
@@ -10,7 +10,7 @@
     group: "{{ nextcloud_group }}"
 
 - name: Allow changes to install directory
-  file:
+  ansible.builtin.file:
     path: "{{ nextcloud_directory }}"
     state: directory
     recurse: true
@@ -18,14 +18,14 @@
     group: "{{ nextcloud_group }}"
 
 - name: Warn if password was not changed
-  pause:
+  ansible.builtin.pause:
     prompt: nextcloud_admin_password is 'nextcloud', make sure to change this after installation! Press enter to confirm
   when:
     - nextcloud_admin_password == 'nextcloud'
 
 - block:
     - name: Ensure no config.php is present
-      file:
+      ansible.builtin.file:
         path: "{{ nextcloud_configuration }}"
         state: absent
 
@@ -33,7 +33,7 @@
       become_user: "{{ nextcloud_owner }}"
       become_flags: "{{ ansible_become_flags | default(omit) }}"
       become: true
-      command: >
+      ansible.builtin.command: >
         {{ nextcloud_php_executable }} occ maintenance:install
         --database={{ nextcloud_database.type }}
         --database-host={{ nextcloud_database.hostname }}
@@ -49,13 +49,13 @@
         creates: "{{ nextcloud_configuration }}"
 
     - name: Check config.php is not empty
-      stat:
+      ansible.builtin.stat:
         path: "{{ nextcloud_configuration }}"
       register: nextcloud_config_size
       failed_when: nextcloud_config_size.stat.size is undefined or nextcloud_config_size.stat.size <= 100
 
     - name: Verify php syntax
-      command: "{{ nextcloud_php_executable }} -l {{ nextcloud_configuration }}"
+      ansible.builtin.command: "{{ nextcloud_php_executable }} -l {{ nextcloud_configuration }}"
       register: nextcloud_config_validate
       changed_when: false
       failed_when:
@@ -64,7 +64,7 @@
 
   rescue:
     - name: Cleanup if installation failed
-      file:
+      ansible.builtin.file:
         path: "{{ nextcloud_configuration }}"
         state: absent
       failed_when: true

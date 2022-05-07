@@ -1,14 +1,15 @@
 ---
 - name: Create additional nextcloud configurations
-  template:
+  ansible.builtin.template:
     src: "{{ nextcloud_configuration_template }}"
     dest: "{{ nextcloud_configuration_override }}"
+    mode: u=rwX,g=rX,o-rwx
     owner: "{{ nextcloud_owner }}"
     group: "{{ nextcloud_group }}"
     validate: php -l %s
 
 - name: Create default cronjob
-  cron:
+  ansible.builtin.cron:
     name: nextcloud default cronjob
     state: "{{ 'present' if nextcloud_cronjob.enabled else 'absent' }}"
     user: "{{ nextcloud_owner }}"
@@ -21,7 +22,7 @@
     job: "{{ nextcloud_php_executable }} {{ nextcloud_directory }}/cron.php"
 
 - name: Create additional cronjobs
-  cron:
+  ansible.builtin.cron:
     name: "{{ item.name }}"
     state: "{{ 'present' if item.enabled else 'absent' }}"
     user: "{{ nextcloud_owner }}"
@@ -38,12 +39,16 @@
     - name: Check if logrotate exists
       ansible.builtin.command: logrotate --version
       register: nextcloud_check_logrotate
+      changed_when: false
       failed_when: nextcloud_check_logrotate.rc != 0
 
     - name: Create logrotate config for nextcloud logs
-      template:
+      ansible.builtin.template:
         src: "{{ nextcloud_log.rotate.template }}"
         dest: "{{ nextcloud_log.rotate.dest }}"
+        owner: root
+        group: root
+        mode: 0644
   rescue:
     - name: Logrotate enabled, but package not present
       ansible.builtin.debug:

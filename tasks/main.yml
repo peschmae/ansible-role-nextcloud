@@ -7,7 +7,7 @@
   changed_when: false
 
 - name: Check config.php is not empty
-  stat:
+  ansible.builtin.stat:
     path: "{{ nextcloud_configuration }}"
   register: nextcloud_config_file
   changed_when: false
@@ -20,5 +20,5 @@
 
 - import_tasks: configuration.yml
 
-- include_tasks: extensions.yml
+- include_tasks: applications.yml
   with_items: "{{ nextcloud_apps }}"
