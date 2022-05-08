@@ -5,14 +5,6 @@
     nextcloud_admin_password: molecule
     nextcloud_php_executable: /opt/bitnami/php/bin/php
     nextcloud_database_hostname: mysql
-    nextcloud_apps:
-      - name: breezedark
-        enabled: True
-        config:
-          theme_enabled: "1"
-          theme_login_page: "1"
-      - name: drawio
-        enabled: False
   tasks:
     - name: "Include peschmae.nextcloud"
       ansible.builtin.include_role:
