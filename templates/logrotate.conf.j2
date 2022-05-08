@@ -1,7 +1,7 @@
-{{ nextcloud_log.file }} {
+{{ nextcloud_log_file }} {
 	daily
 	missingok
-	rotate {{ nextcloud_log.rotate.keep_days }}
+	rotate {{ nextcloud_log_rotate.keep_days }}
 	compress
 	delaycompress
 	notifempty

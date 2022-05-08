@@ -26,14 +26,15 @@ nextcloud_updatesecret: ""
 nextcloud_admin_user: ncadmin
 nextcloud_admin_password: nextcloud
 
-nextcloud_log:
-  rotate:
-    enabled: false
-    keep_days: 14
-    template: logrotate.conf.j2
-    dest: /etc/logrotate.d/nextcloud
-  file: /var/log/nextcloud/nextcloud.log
-  level: 2
+nextcloud_log_rotate:
+  enabled: false
+  keep_days: 14
+  template: logrotate.conf.j2
+  dest: /etc/logrotate.d/nextcloud
+
+
+nextcloud_log_file: /var/log/nextcloud/nextcloud.log
+nextcloud_log_level: 2
 
 nextcloud_default_language: en
 nextcloud_default_locale: en_US

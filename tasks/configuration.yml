@@ -63,8 +63,8 @@
 
     - name: Create logrotate config for nextcloud logs
       ansible.builtin.template:
-        src: "{{ nextcloud_log.rotate.template }}"
-        dest: "{{ nextcloud_log.rotate.dest }}"
+        src: "{{ nextcloud_log_rotate.template }}"
+        dest: "{{ nextcloud_log_rotate.dest }}"
         owner: root
         group: root
         mode: 0644
@@ -72,4 +72,4 @@
     - name: Logrotate enabled, but package not present
       ansible.builtin.debug:
         msg: Tried to create the logroate config, but no package named logrotate is installed
-  when: nextcloud_log.rotate.enabled
+  when: nextcloud_log_rotate.enabled

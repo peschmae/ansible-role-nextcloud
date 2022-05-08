@@ -2,8 +2,8 @@
 $CONFIG = array(
     'updater.secret' => '{{ nextcloud_updatesecret_hashed }}',
     'datadirectory' => '{{ nextcloud_data_directory }}',
-    'logfile' => '{{ nextcloud_log.file }}',
-    'loglevel' => '{{ nextcloud_log.level }}',
+    'logfile' => '{{ nextcloud_log_file }}',
+    'loglevel' => '{{ nextcloud_log_level }}',
     'updater.release.channel' => '{{ nextcloud_release_channel }}',
     'trusted_domains' => array (
     {%- if nextcloud_domains|length > 0 %}
