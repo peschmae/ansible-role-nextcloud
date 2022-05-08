@@ -32,8 +32,8 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
-        - 10
-        - 11
+        - buster
+        - bullseye
   # - name: Fedora
   #   versions:
   #   - all

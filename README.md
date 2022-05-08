@@ -1,7 +1,7 @@
 peschmae-nextcloud
 =========
 
-Installs nextcloud initially, and manages extensions & configuration. 
+Installs nextcloud initially, and manages extensions & configuration.
 
 Does not support upgrading nextcloud! (Use the webui for it)
 
@@ -20,7 +20,11 @@ A description of the settable variables for this role should go here, including 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+It's expected to have php already configured and mysql database prepared before using the role.
+
+Additionally you would want a webserver, and maybe redis available.
+
+For a full list of php packages that should be installed beforehand, check the nextcloud installation instructions: https://docs.nextcloud.com/server/latest/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
 
 Example Playbook
 ----------------
