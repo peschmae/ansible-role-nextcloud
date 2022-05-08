@@ -5,7 +5,7 @@ driver:
   name: docker
 platforms:
   - name: mysql
-    image: mysql
+    image: mysql:debian
     pre_build_image: true
     env:
       MYSQL_ROOT_PASSWORD: molecule
@@ -14,6 +14,17 @@ platforms:
       MYSQL_PASSWORD: nextcloud
     exposed_ports:
       - 3306/tcp
+    network_mode: bridge
+    docker_networks:
+      - name: nextcloud
+    networks:
+      - name: nextcloud
+    override_command: False
+  - name: redis
+    image: redis:alpine
+    pre_build_image: true
+    exposed_ports:
+      - 6379/tcp
     network_mode: bridge
     docker_networks:
       - name: nextcloud

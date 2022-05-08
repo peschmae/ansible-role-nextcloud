@@ -18,6 +18,11 @@
         enabled: true
         command: "{{ nextcloud_php_executable }} {{ nextcloud_directory }}/occ groupfolders:scan 1"
         schedule: "*/5 * * * *"
+    nextcloud_redis_enabled: true
+    nextcloud_redis:
+      host: redis
+      port: 6379
+      dbindex: 1
   tasks:
     - name: "Include peschmae.nextcloud"
       ansible.builtin.include_role:
