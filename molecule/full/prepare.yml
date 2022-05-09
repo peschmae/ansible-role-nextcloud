@@ -30,9 +30,7 @@
         mode: 0644
 
     - name: install php-redis through pecl
-      community.general.pear:
-        name: redis
-        state: present
+      community.general.command: "yes no | pecl install redis"
 
     - name: enable redis
       ansible.builtin.copy:
