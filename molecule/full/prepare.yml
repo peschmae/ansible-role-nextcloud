@@ -30,7 +30,7 @@
         mode: 0644
 
     - name: install php-redis through pecl
-      ansible.builtin.command: "yes no | pecl install redis"
+      ansible.builtin.shell: "yes no | pecl install redis"
 
     - name: enable redis
       ansible.builtin.copy:
