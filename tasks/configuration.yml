@@ -72,4 +72,4 @@
     - name: Logrotate enabled, but package not present
       ansible.builtin.debug:
         msg: Tried to create the logroate config, but no package named logrotate is installed
-  when: nextcloud_log_rotate.enabled
+  when: nextcloud_log_rotate_enabled

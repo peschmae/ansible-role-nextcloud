@@ -26,12 +26,16 @@ nextcloud_updatesecret: ""
 nextcloud_admin_user: ncadmin
 nextcloud_admin_password: nextcloud
 
+nextcloud_log_rotate_enabled: false
 nextcloud_log_rotate:
-  enabled: false
   keep_days: 14
   template: logrotate.conf.j2
   dest: /etc/logrotate.d/nextcloud
 
+nextcloud_memcache_local: '\\OC\Memcache\\APCu'
+# only activated if redis is present
+nextcloud_memcache_locking: '\\OC\Memcache\\Redis'
+nextcloud_memcache_distributed: '\\OC\Memcache\\Redis'
 
 nextcloud_log_file: /var/log/nextcloud/nextcloud.log
 nextcloud_log_level: 2

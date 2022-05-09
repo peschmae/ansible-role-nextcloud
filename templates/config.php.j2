@@ -2,6 +2,7 @@
 $CONFIG = array(
     'updater.secret' => '{{ nextcloud_updatesecret_hashed }}',
     'datadirectory' => '{{ nextcloud_data_directory }}',
+    'skeletondirectory' => '{{ nextcloud_skeleton_directory }}',
     'logfile' => '{{ nextcloud_log_file }}',
     'loglevel' => '{{ nextcloud_log_level }}',
     'updater.release.channel' => '{{ nextcloud_release_channel }}',
@@ -31,13 +32,17 @@ $CONFIG = array(
             'mail_{{ key }}' => '{{ value }}',
         {%- endfor %}
     {%- endif %}
+
     {%- if nextcloud_redis_enabled  %}
     'redis' => array(
-        {% for key, value in nextcloud_redis.items() -%}
+        {% for key, value in nextcloud_redis.items() %}
         '{{ key }}' => '{{ value }}',
         {%- endfor %}
     ),
+    'memcache.locking' => '{{ nextcloud_memcache_locking }}',
+    'memcache.distributed' => '{{ nextcloud_memcache_distributed }}',
     {%- endif %}
+    'memcache.local' => '{{ nextcloud_memcache_local }}',
     {%- if nextcloud_trusted_proxies|length > 0 %}
     'trusted_proxies' => array (
     {%- for proxy in nextcloud_trusted_proxies %}
