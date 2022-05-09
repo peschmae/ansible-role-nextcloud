@@ -5,4 +5,5 @@ RUN apt update && \
     # debugging only...
     # apt install -y netcat iputils-ping dnsutils && \
     apt clean && \
-    echo "memory_limit = 512M" > /opt/bitnami/php/etc/conf.d/memory.ini
+    echo "memory_limit = 512M" > /opt/bitnami/php/etc/conf.d/memory.ini && \
+    echo "extension = apcu.so" > /opt/bitnami/php/etc/conf.d/apcu.ini
