@@ -23,7 +23,10 @@
 
     - name: enable apcu
       ansible.builtin.copy:
-        content: "extension = apcu.so"
+        content: |
+          extension = apcu.so
+          apc.enabled = 1
+          apc.enable_cli = 1
         dest: /opt/bitnami/php/etc/conf.d/apcu.ini
         owner: 1000
         group: 1000
@@ -41,7 +44,7 @@
         mode: 0644
 
     - name: list enabled php modules
-      ansible.builtin.command: "php -m"
+      ansible.builtin.command: "/opt/bitnami/php/bin/php -m"
       register: debug_enabled_php_modules
 
     - name: show enabled php modules
