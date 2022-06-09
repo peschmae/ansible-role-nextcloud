@@ -1,17 +1,4 @@
 ---
-# Enable/Download apps using the occ command
-# optimization potential: do this just once, check if there are duplicate keys in nextcloud_apps
-- name: Get list of installed apps
-  become_user: "{{ nextcloud_owner }}"
-  become_flags: "{{ ansible_become_flags | default(omit) }}"
-  become: true
-  ansible.builtin.command: "{{ nextcloud_php_executable }} occ app:list --output=json"
-  args:
-    chdir: "{{ nextcloud_directory }}"
-  register: nextcloud_installed_apps
-  changed_when: false
-  when: app_installed is changed or app_enabled is changed or app_disabled is changed
-
 - name: Show installed apps
   ansible.builtin.debug:
     var: (nextcloud_installed_apps.stdout | from_json)
@@ -75,3 +62,16 @@
     - name: Show message if application installation failed
       ansible.builtin.debug:
         msg: Installation of app {{ item.name }} failed... See errro above for more information.
+
+# Enable/Download apps using the occ command
+# optimization potential: do this just once, check if there are duplicate keys in nextcloud_apps
+- name: Get list of installed apps
+  become_user: "{{ nextcloud_owner }}"
+  become_flags: "{{ ansible_become_flags | default(omit) }}"
+  become: true
+  ansible.builtin.command: "{{ nextcloud_php_executable }} occ app:list --output=json"
+  args:
+    chdir: "{{ nextcloud_directory }}"
+  register: nextcloud_installed_apps
+  changed_when: false
+  when: app_installed is changed or app_enabled is changed or app_disabled is changed
