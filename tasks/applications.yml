@@ -10,6 +10,7 @@
     chdir: "{{ nextcloud_directory }}"
   register: nextcloud_installed_apps
   changed_when: false
+  when: app_installed is changed or app_enabled is changed or app_disabled is changed
 
 - name: Show installed apps
   ansible.builtin.debug:
@@ -23,6 +24,7 @@
       become_flags: "{{ ansible_become_flags | default(omit) }}"
       become: true
       ansible.builtin.command: "{{ nextcloud_php_executable }} occ app:install {{ item.name }}"
+      register: app_installed
       args:
         chdir: "{{ nextcloud_directory }}"
       when:
@@ -35,6 +37,7 @@
       become_flags: "{{ ansible_become_flags | default(omit) }}"
       become: true
       ansible.builtin.command: "{{ nextcloud_php_executable }} occ app:enable {{ item.name }}"
+      register: app_enabled
       args:
         chdir: "{{ nextcloud_directory }}"
       when:
@@ -46,6 +49,7 @@
       become_flags: "{{ ansible_become_flags | default(omit) }}"
       become: true
       ansible.builtin.command: "{{ nextcloud_php_executable }} occ app:disable {{ item.name }}"
+      register: app_disabled
       args:
         chdir: "{{ nextcloud_directory }}"
       when:

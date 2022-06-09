@@ -20,5 +20,17 @@
 
 - import_tasks: configuration.yml
 
+# Enable/Download apps using the occ command
+# optimization potential: do this just once, check if there are duplicate keys in nextcloud_apps
+- name: Get list of installed apps
+  become_user: "{{ nextcloud_owner }}"
+  become_flags: "{{ ansible_become_flags | default(omit) }}"
+  become: true
+  ansible.builtin.command: "{{ nextcloud_php_executable }} occ app:list --output=json"
+  args:
+    chdir: "{{ nextcloud_directory }}"
+  register: nextcloud_installed_apps
+  changed_when: false
+
 - include_tasks: applications.yml
   with_items: "{{ nextcloud_apps }}"
