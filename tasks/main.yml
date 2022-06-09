@@ -34,3 +34,5 @@
 
 - include_tasks: applications.yml
   with_items: "{{ nextcloud_apps }}"
+  vars:
+    nextcloud_installed_apps: "{{ nextcloud_installed_apps }}"
