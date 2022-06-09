@@ -15,6 +15,9 @@ $CONFIG = array(
         0 => '{{ ansible_host }}',
     {% endif -%}
     ),
+    'default_phone_region' => '{{ nextcloud_default_phone_region }}',
+    'default_language' => '{{ nextcloud_default_language }}',
+    'default_locale' => '{{ nextcloud_default_locale }}',
     'overwrite.cli.url' => '{{ nextcloud_overwrite_cli_uri }}',
     // database configuration
     'dbtype' => '{{ nextcloud_database_type }}',
