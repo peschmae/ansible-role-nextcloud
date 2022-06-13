@@ -7,10 +7,10 @@ $CONFIG = array(
     'loglevel' => '{{ nextcloud_log_level }}',
     'updater.release.channel' => '{{ nextcloud_release_channel }}',
     'trusted_domains' => array (
-    {%- if nextcloud_domains|length > 0 %}
-    {%- for domain in nextcloud_domains %}
-        {{ loop.index0 }} => '{{ domain }}',
-    {%- endfor %}
+    {% if nextcloud_domains|length > 0 -%}
+    {% for domain in nextcloud_domains %}
+    {{ loop.index0 }} => '{{ domain }}',
+    {% endfor -%}
     {% else %}
         0 => '{{ ansible_host }}',
     {% endif -%}
@@ -26,39 +26,38 @@ $CONFIG = array(
     'dbport' => '{{ nextcloud_database_port }}',
     'dbuser' => '{{ nextcloud_database_username }}',
     'dbpassword' => '{{ nextcloud_database_password }}',
-    {%- if nextcloud_database_type == 'mysql' %}
+    {% if nextcloud_database_type == 'mysql' -%}
     'mysql.utf8mb4' => true,
-    {%- endif %}
-    {%- if nextcloud_mail_enabled  %}
+    {% endif -%}
+    {% if nextcloud_mail_enabled  -%}
     // mail configuration
-        {% for key, value in nextcloud_mail.items() -%}
-            'mail_{{ key }}' => '{{ value }}',
-        {%- endfor %}
-    {%- endif %}
-
-    {%- if nextcloud_redis_enabled  %}
+    {% for key, value in nextcloud_mail.items() -%}
+        'mail_{{ key }}' => '{{ value }}',
+    {% endfor -%}
+    {% endif -%}
+    {%- if nextcloud_redis_enabled  -%}
     'redis' => array(
-        {% for key, value in nextcloud_redis.items() %}
-        '{{ key }}' => '{{ value }}',
-        {%- endfor %}
+    {% for key, value in nextcloud_redis.items() %}
+    '{{ key }}' => '{{ value }}',
+    {% endfor %}
     ),
     'memcache.locking' => '{{ nextcloud_memcache_locking }}',
     'memcache.distributed' => '{{ nextcloud_memcache_distributed }}',
-    {%- endif %}
+    {% endif -%}
     'memcache.local' => '{{ nextcloud_memcache_local }}',
-    {%- if nextcloud_trusted_proxies|length > 0 %}
+    {% if nextcloud_trusted_proxies|length > 0 -%}
     'trusted_proxies' => array (
-    {%- for proxy in nextcloud_trusted_proxies %}
-        {{ loop.index0 }} => '{{ proxy }}',
-    {%- endfor %}
+    {% for proxy in nextcloud_trusted_proxies %}
+    {{ loop.index0 }} => '{{ proxy }}',
+    {% endfor -%}
     ),
     {% endif -%}
-    {%- if nextcloud_additional_configuration %}
+    {% if nextcloud_additional_configuration -%}
     {% for key, value in nextcloud_additional_configuration.items() -%}
     '{{ key }}' => '{{ value }}',
-    {%- endfor %}
-    {%- endif %}
-    {%- if nextcloud_additional_nested_configs -%}
+    {% endfor -%}
+    {%- endif -%}
+    {%- if nextcloud_additional_nested_configs %}
     {{ nextcloud_additional_nested_configs }}
-    {%- endif %}
+    {% endif -%}
 );

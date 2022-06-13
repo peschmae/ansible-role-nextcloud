@@ -11,7 +11,7 @@
 
 - name: Set hashed updater.secret
   ansible.builtin.set_fact:
-    nextcloud_updatesecret_hashed: nextcloud_updatesecret_hashed_tmp.stdout[0]
+    nextcloud_updatesecret_hashed: "{{ nextcloud_updatesecret_hashed_tmp.stdout }}"
 
 - name: Debug nextcloud_updatesecret_hashed
   ansible.builtin.debug:
