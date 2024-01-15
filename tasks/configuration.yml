@@ -3,6 +3,7 @@
   ansible.builtin.command: "{{ nextcloud_php_executable }} -r 'echo password_hash(\"{{ nextcloud_updatesecret }}\", PASSWORD_DEFAULT);'"
   register: nextcloud_updatesecret_hashed_tmp
   changed_when: false
+  check_mode: false
 
 - name: Debug nextcloud_updatesecret_hashed
   ansible.builtin.debug:
@@ -12,6 +13,7 @@
 - name: Set hashed updater.secret
   ansible.builtin.set_fact:
     nextcloud_updatesecret_hashed: "{{ nextcloud_updatesecret_hashed_tmp.stdout }}"
+  check_mode: false
 
 - name: Debug nextcloud_updatesecret_hashed
   ansible.builtin.debug:

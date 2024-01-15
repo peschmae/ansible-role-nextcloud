@@ -5,12 +5,16 @@
   register: nextcloud_check_php
   failed_when: nextcloud_check_php.rc != 0
   changed_when: false
+  tags:
+    - nextcloud_configuration
 
 - name: Check config.php is not empty
   ansible.builtin.stat:
     path: "{{ nextcloud_configuration }}"
   register: nextcloud_config_file
   changed_when: false
+  tags:
+    - nextcloud_configuration
 
 - import_tasks: download.yml
   when: "'isreg' not in nextcloud_config_file.stat"
@@ -19,6 +23,8 @@
   when: "'isreg' not in nextcloud_config_file.stat"
 
 - import_tasks: configuration.yml
+  tags:
+    - nextcloud_configuration
 
 - include_tasks: applications.yml
   with_items: "{{ nextcloud_apps }}"
